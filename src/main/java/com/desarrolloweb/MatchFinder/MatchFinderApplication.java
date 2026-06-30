@@ -1,13 +1,13 @@
-package com.desarrolloweb.MatchFinder;
+package com.desarrolloweb.matchfinder;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MatchFinderApplication {
+public class MatchfinderApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MatchFinderApplication.class, args);
+		SpringApplication.run(MatchfinderApplication.class, args);
 	}
 
 }
