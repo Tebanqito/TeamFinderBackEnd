@@ -1,5 +1,6 @@
 package com.desarrolloweb.matchfinder.entities;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,12 +11,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class User {
+public class Team5 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private Integer idUser;
-    private String userName;
-    private String userEmail;
-    private String userPassword;
+    private Integer idTeam5;
 }
