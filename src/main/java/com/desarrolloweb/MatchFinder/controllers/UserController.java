@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -32,9 +34,36 @@ public class UserController {
     }
 
     @PostMapping("/auth/register")
-    public ResponseEntity<?> createUser(@RequestBody MatchFinderUser user){
-        UserDTO userCreated = userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userCreated);
+    public ResponseEntity<?> createUser(@RequestBody MatchFinderUser user) {
+
+        // Mapa reutilizable para estructurar las respuestas JSON de error
+        Map<String, String> errorResponse = new HashMap<>();
+
+        try {
+            // 1. Validación 400 - Formato de Correo
+            if (user.getUserEmail() == null || !user.getUserEmail().contains("@")) {
+                errorResponse.put("error", "400 - El campo 'user_Email' no tiene un formato válido");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+
+            // 2. Validación 422 - Requisitos de Contraseña
+            if (user.getUserPassword() == null || user.getUserPassword().length() < 8) {
+                errorResponse.put("error", "422 - La contraseña debe tener al menos 8 caracteres");
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
+            }
+
+            if (!userService.isUserEmail(user.getUserEmail())) {
+                errorResponse.put("error", "409 - El correo electrónico ya está registrado");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+            }
+
+            userService.createUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Usuario registrado con éxito");
+
+        } catch (Exception e) {
+            errorResponse.put("error", "500 - Error interno del servidor");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
 
     @PatchMapping("update/user/{id}")
