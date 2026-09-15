@@ -4,6 +4,7 @@ import com.desarrolloweb.matchfinder.dtos.UserDTO;
 import com.desarrolloweb.matchfinder.entities.MatchFinderUser;
 import com.desarrolloweb.matchfinder.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,5 +75,11 @@ public class UserService {
         userDTO.setUserName(user.getUserName());
 
         return userDTO;
+    }
+
+    public Boolean isUserEmail(String email) {
+        List<User> users = userRepository.getUserByEmail(email);
+
+        return users.isEmpty();
     }
 }
